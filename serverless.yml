@@ -1,0 +1,43 @@
+service: node-cors-serverless
+
+custom:
+  # Stage is based on what is passed in when running serverless
+  # commands. Or fallsback to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+
+  # Load secret environment variables based on the current stage.
+  # Fallback to default if it is not in prod.
+  environment: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  environment:
+    origins: ${self:custom.environment.cors.origin}
+
+functions:
+  noCors:
+    handler: handler.noCors
+    events:
+      - http:
+         path: no-cors
+         method: get
+  simpleCors:
+    handler: handler.simpleCors
+    events:
+      - http:
+         path: simple-cors
+         method: head
+         cors: ${self:custom.environment.cors}
+      - http:
+         path: simple-cors
+         method: get
+         cors: ${self:custom.environment.cors}
+      - http:
+         path: simple-cors
+         method: post
+         cors: ${self:custom.environment.cors}
+
+resources:
+  # API Gateway Errors
+  - ${file(resources/api-gateway-errors.yml)}

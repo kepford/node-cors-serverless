@@ -1,0 +1,14 @@
+{
+  "name": "cors-serverless",
+  "version": "1.0.0",
+  "description": "A simple Serverless framework project for testing CORS.",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "serverless"
+  ],
+  "author": "Bob Kepford",
+  "license": "ISC"
+}
